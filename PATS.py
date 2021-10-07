@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 P A T S
-a text-based game played in IDE console 
+a text-based game played in command prompt
 raise virtual pets! 
 pat them! euthanize them! feed them! 
 
@@ -73,7 +73,7 @@ def first_pet():
     return [animal,petname,healthy,happy]
 
 def save_file(petlog):
-    f = open("PAT_FILE.txt",'w')
+    f = open("Desktop\PAT_FILE.txt",'w')
 
     petstrh = ""
     del petlog["0"]
@@ -92,7 +92,7 @@ def save_file(petlog):
     
 def open_file():
     #opening file
-    f = open('PAT_FILE.txt')
+    f = open('Desktop\PAT_FILE.txt')
     file = f.read()
     
     all_lines = ""
