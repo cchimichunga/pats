@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Spyder Editor
+P A T S
+a text-based game played in IDE console 
+raise virtual pets! 
+pat them! euthanize them! feed them! 
 
-This is a temporary script file.
+everything you can do to a real pet!! 
+
+Last edited 7 October 2021 by Caitlin Chung
 """
 import time
 import random
@@ -66,30 +71,53 @@ def first_pet():
     time.sleep(.5)
     print("{}, gorgeous name! Thanks for stopping by!".format(petname))
     return [animal,petname,healthy,happy]
-            
+
+def save_file(petlog):
+    f = open("PAT_FILE.txt",'w')
+
+    petstrh = ""
+    del petlog["0"]
+    for thing in petlog:
+        #for pet in petlog[person]:
+        count = 0
+        for x in petlog[thing]:
+            count += 1
+        for x in range(0,count):
+            petstrh += "{}|{}|{}|{}|{}|{}|{}\n\n".format(thing,str(petlog[thing][x].species)\
+                        ,str(petlog[thing][x].petname),str(petlog[thing][x].health),\
+                        str(petlog[thing][x].happiness),str(petlog[thing][x].time_of_birth),\
+                        str(petlog[thing][x].time_of_last_visit))
+    f.write(petstrh)
+    f.close()
     
-#opening file
-f = open('Desktop\PAT_FILE.txt')
-file = f.read()
+def open_file():
+    #opening file
+    f = open('PAT_FILE.txt')
+    file = f.read()
+    
+    all_lines = ""
+    all_lines += "0|0|0|0|0|0|0\n\n"
+    for line in file:
+        all_lines += str(line)
+    all_entry = all_lines.strip().split("\n\n")
+    
+    for x in range(len(all_entry)):
+        all_entry[x] = all_entry[x].split("|")
 
-all_lines = ""
-all_lines += "0|0|0|0|0|0|0\n\n"
-for line in file:
-    all_lines += str(line)
-all_entry = all_lines.strip().split("\n\n")
-
-for x in range(len(all_entry)):
-    all_entry[x] = all_entry[x].split("|")
-x = ""
-petlog = {}
-entry_list = list()
-if len(all_entry) > 1:
+    petlog = {}
+    entry_list = list()
     for entry in all_entry:
         entry_list.append(Person(entry[1],entry[2],entry[3],entry[4],entry[5],entry[6]))
         if entry[0] in petlog: #if the person's name is there already,
             petlog[entry[0]].append(Person(entry[1],entry[2],entry[3],entry[4],entry[5],entry[6]))
         else:
             petlog[entry[0]] = [Person(entry[1],entry[2],entry[3],entry[4],entry[5],entry[6])]
+    return petlog
+
+##############################################33
+petlog = open_file()
+if len(petlog) > 1:
+    x = ""
     print("New Player? Y or N")
     while x != "y" and x!= "n":
         x = input(">> ")
@@ -166,6 +194,10 @@ if number == 0: #loners
     print("{}, you have 0 pets! What's life without a pet or two?\nLet's get a pet for you!".format(name.title()))
     new = first_pet()
     petlog[name] = [Person(new[0],new[1],new[2],new[3],time.time(),time.time())]
+    save_file(petlog)
+    petlog = open_file()
+    
+number = len(petlog[name])
 if number == 1:
     print("{}, you have 1 pet!".format(name.title()))
     if dying != 1 and depressed != 1:
@@ -254,11 +286,11 @@ while to_go != "Y":
                     elif interact == str(3):
                         ee = False
                         while ee != True:
-                            if number == 1:
+                            if len(petlog[name]) == 1:
                                 print("Sorry, you can't perform this action. You only have one pet!\n\n")
                                 ee = True
                                 ii = True
-                            elif number > 1:
+                            elif len(petlog[name]) > 1:
                                 print("{} looks at you with sad eyes.".format(chosenpet.petname))
                                 uu = input("Are you sure you want to do this? Y/N\n>>").lower()
                                 if uu == "n":
@@ -280,19 +312,5 @@ while to_go != "Y":
                 print("Sorry, invalid response. Please try again.")
             
     to_go = input("\nAre you sure you want to exit? Y/N\n").title()
-f = open("Desktop\PAT_FILE.txt",'w')
 
-petstrh = ""
-del petlog["0"]
-for thing in petlog:
-    #for pet in petlog[person]:
-    count = 0
-    for x in petlog[thing]:
-        count += 1
-    for x in range(0,count):
-        petstrh += "{}|{}|{}|{}|{}|{}|{}\n\n".format(thing,str(petlog[thing][x].species)\
-                    ,str(petlog[thing][x].petname),str(petlog[thing][x].health),\
-                    str(petlog[thing][x].happiness),str(petlog[thing][x].time_of_birth),\
-                    str(petlog[thing][x].time_of_last_visit))
-f.write(petstrh)
-f.close()
+save_file(petlog)
